@@ -87,6 +87,57 @@ feature_importance = feature_importance.sort_values('importance', ascending=Fals
 print("\nTop 5 Most Important Features:")
 print(feature_importance.head())
 
+# Write detailed feature analysis to a log file
+with open('feature_analysis.txt', 'w') as f:
+    f.write("Heart Disease Classifier - Feature Analysis\n")
+    f.write("=" * 50 + "\n\n")
+    
+    # Model parameters
+    f.write("Model Configuration\n")
+    f.write("-" * 20 + "\n")
+    f.write(f"Best Parameters: {grid_search.best_params_}\n")
+    f.write(f"Best Cross-Validation Score (Balanced Accuracy): {grid_search.best_score_:.2f}\n")
+    f.write(f"Validation Set Accuracy: {accuracy:.2f}\n\n")
+    
+    # Feature importance analysis
+    f.write("Feature Importance Analysis\n")
+    f.write("-" * 25 + "\n")
+    f.write("Features ranked by importance in model predictions:\n\n")
+    
+    total_importance = 0
+    for idx, (feature, importance) in enumerate(zip(feature_importance['feature'], feature_importance['importance']), 1):
+        total_importance += importance
+        f.write(f"{idx}. {feature:<25} {importance:.4f} ({importance*100:.2f}%)\n")
+        f.write(f"   Cumulative importance: {total_importance*100:.2f}%\n\n")
+    
+    # Dataset statistics
+    f.write("\nDataset Statistics\n")
+    f.write("-" * 17 + "\n")
+    f.write(f"Training set shape: {train_data.shape}\n")
+    f.write("Training set class distribution:\n")
+    train_dist = train_data['target'].value_counts(normalize=True)
+    f.write(f"No Disease (0): {train_dist[0]:.2%}\n")
+    f.write(f"Disease (1): {train_dist[1]:.2%}\n\n")
+    
+    f.write(f"Validation set shape: {validation_data.shape}\n")
+    f.write("Validation set class distribution:\n")
+    val_dist = validation_data['target'].value_counts(normalize=True)
+    for label in sorted(val_dist.index):
+        f.write(f"Class {label}: {val_dist[label]:.2%}\n")
+    
+    # Performance metrics
+    f.write("\nModel Performance Metrics\n")
+    f.write("-" * 23 + "\n")
+    f.write("Classification Report:\n")
+    f.write(classification_report(y_val, y_pred))
+    f.write("\nConfusion Matrix:\n")
+    f.write(str(conf_matrix))
+    f.write("\n\nNote: Feature importance values indicate the relative contribution\n")
+    f.write("of each feature to the model's predictions. Higher values indicate\n")
+    f.write("stronger influence on the decision-making process.\n")
+
+print("\nFeature analysis has been saved to 'feature_analysis.txt'")
+
 # Plot feature importance
 plt.figure(figsize=(12, 6))
 plt.bar(feature_importance['feature'], feature_importance['importance'])
