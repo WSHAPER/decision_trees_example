@@ -129,7 +129,30 @@ class CustomDecisionTree:
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        importance = self.feature_importance_ / np.sum(self.feature_importance_)
+        # Write feature analysis to a log file
+        with open(os.path.join(output_dir, 'feature_analysis.txt'), 'w') as f:
+            f.write("Custom Decision Tree - Feature Analysis\n")
+            f.write("=" * 50 + "\n\n")
+            
+            # Model parameters
+            f.write("Model Configuration\n")
+            f.write("-" * 20 + "\n")
+            f.write(f"Max Depth: {self.max_depth}\n")
+            f.write(f"Min Samples Split: {self.min_samples_split}\n\n")
+            
+            # Feature importance analysis
+            f.write("Feature Importance Analysis\n")
+            f.write("-" * 25 + "\n")
+            f.write("Features ranked by importance in model predictions:\n\n")
+            
+            importance = self.feature_importance_ / np.sum(self.feature_importance_)
+            total_importance = 0
+            for idx, (feature, imp) in enumerate(zip(feature_names, importance), 1):
+                total_importance += imp
+                f.write(f"{idx}. {feature:<25} {imp:.4f} ({imp*100:.2f}%)\n")
+                f.write(f"   Cumulative importance: {total_importance*100:.2f}%\n\n")
+
+        # Plot feature importance
         sorted_idx = np.argsort(importance)
         pos = np.arange(sorted_idx.shape[0]) + .5
 
@@ -139,8 +162,11 @@ class CustomDecisionTree:
         plt.xlabel('Relative Importance')
         plt.title('Feature Importance (Custom Implementation)')
         plt.tight_layout()
-        plt.savefig(os.path.join(output_dir, 'custom_feature_importance.png'))
+        plt.savefig(os.path.join(output_dir, 'feature_importance.png'))
         plt.close()
+
+        print("\nFeature analysis has been saved to 'outputs/custom_decision_tree/feature_analysis.txt'")
+        print("Feature importance plot has been saved as 'outputs/custom_decision_tree/feature_importance.png'")
 
 if __name__ == '__main__':
     # Load the datasets
@@ -168,4 +194,4 @@ if __name__ == '__main__':
     # Plot feature importance with human-readable names
     feature_names = [get_feature_display_name(col) for col in train_data.drop('target', axis=1).columns]
     custom_dt.plot_feature_importance(feature_names)
-    print("\nFeature importance plot has been saved as 'outputs/custom_decision_tree/custom_feature_importance.png'")
+    print("\nFeature importance plot has been saved as 'outputs/custom_decision_tree/feature_importance.png'")
