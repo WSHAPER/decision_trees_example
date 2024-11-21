@@ -133,7 +133,7 @@ class CustomDecisionTree:
         plt.xlabel('Relative Importance')
         plt.title('Feature Importance (Custom Implementation)')
         plt.tight_layout()
-        plt.savefig('custom_feature_importance.png')
+        plt.savefig('outputs/custom_feature_importance.png')
         plt.close()
 
 if __name__ == '__main__':
@@ -162,4 +162,4 @@ if __name__ == '__main__':
     # Plot feature importance with human-readable names
     feature_names = [get_feature_display_name(col) for col in train_data.drop('target', axis=1).columns]
     custom_dt.plot_feature_importance(feature_names)
-    print("\nFeature importance plot has been saved as 'custom_feature_importance.png'")
+    print("\nFeature importance plot has been saved as 'outputs/custom_feature_importance.png'")

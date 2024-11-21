@@ -88,7 +88,7 @@ print("\nTop 5 Most Important Features:")
 print(feature_importance.head())
 
 # Write detailed feature analysis to a log file
-with open('feature_analysis.txt', 'w') as f:
+with open('outputs/feature_analysis.txt', 'w') as f:
     f.write("Heart Disease Classifier - Feature Analysis\n")
     f.write("=" * 50 + "\n\n")
     
@@ -136,7 +136,7 @@ with open('feature_analysis.txt', 'w') as f:
     f.write("of each feature to the model's predictions. Higher values indicate\n")
     f.write("stronger influence on the decision-making process.\n")
 
-print("\nFeature analysis has been saved to 'feature_analysis.txt'")
+print("\nFeature analysis has been saved to 'outputs/feature_analysis.txt'")
 
 # Plot feature importance
 plt.figure(figsize=(12, 6))
@@ -144,7 +144,7 @@ plt.bar(feature_importance['feature'], feature_importance['importance'])
 plt.xticks(rotation=45, ha='right')
 plt.title('Feature Importance')
 plt.tight_layout()
-plt.savefig('feature_importance.png')
+plt.savefig('outputs/feature_importance.png')
 
 # Visualize the decision tree (limited depth for clarity)
 plt.figure(figsize=(20,10))
@@ -153,5 +153,5 @@ plot_tree(best_model,
           class_names=['No Disease', 'Disease'],
           filled=True, rounded=True, max_depth=3)
 plt.tight_layout()
-plt.savefig('decision_tree_visualization.png')
-print("\nVisualizations have been saved as 'decision_tree_visualization.png' and 'feature_importance.png'")
+plt.savefig('outputs/decision_tree_visualization.png')
+print("\nVisualizations have been saved as 'outputs/decision_tree_visualization.png' and 'outputs/feature_importance.png'")
