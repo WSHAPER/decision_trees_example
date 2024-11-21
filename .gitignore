@@ -21,3 +21,4 @@ build/
 decision_tree_visualization.png
 feature_importance.png
 feature_analysis.txt
+custom_feature_importance.png
