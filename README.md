@@ -35,6 +35,7 @@ pip install -r requirements.txt
 4. Run the decision tree classifier:
 ```bash
 python heart_disease_classifier.py
+# same for custom_decision_tree.py
 ```
 This will:
 1. Train the model and display performance metrics

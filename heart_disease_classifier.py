@@ -6,6 +6,7 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from feature_mapping import get_feature_display_name, get_all_feature_names
+import os
 
 # Load the datasets
 train_data = pd.read_csv('sample_data/heart_Disease_training.csv')
@@ -87,8 +88,13 @@ feature_importance = feature_importance.sort_values('importance', ascending=Fals
 print("\nTop 5 Most Important Features:")
 print(feature_importance.head())
 
+# Create output directory if it doesn't exist
+output_dir = 'outputs/heart_disease_classifier'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 # Write detailed feature analysis to a log file
-with open('outputs/feature_analysis.txt', 'w') as f:
+with open(os.path.join(output_dir, 'feature_analysis.txt'), 'w') as f:
     f.write("Heart Disease Classifier - Feature Analysis\n")
     f.write("=" * 50 + "\n\n")
     
@@ -136,7 +142,7 @@ with open('outputs/feature_analysis.txt', 'w') as f:
     f.write("of each feature to the model's predictions. Higher values indicate\n")
     f.write("stronger influence on the decision-making process.\n")
 
-print("\nFeature analysis has been saved to 'outputs/feature_analysis.txt'")
+print("\nFeature analysis has been saved to 'outputs/heart_disease_classifier/feature_analysis.txt'")
 
 # Plot feature importance
 plt.figure(figsize=(12, 6))
@@ -144,7 +150,7 @@ plt.bar(feature_importance['feature'], feature_importance['importance'])
 plt.xticks(rotation=45, ha='right')
 plt.title('Feature Importance')
 plt.tight_layout()
-plt.savefig('outputs/feature_importance.png')
+plt.savefig(os.path.join(output_dir, 'feature_importance.png'))
 
 # Visualize the decision tree (limited depth for clarity)
 plt.figure(figsize=(20,10))
@@ -153,5 +159,5 @@ plot_tree(best_model,
           class_names=['No Disease', 'Disease'],
           filled=True, rounded=True, max_depth=3)
 plt.tight_layout()
-plt.savefig('outputs/decision_tree_visualization.png')
-print("\nVisualizations have been saved as 'outputs/decision_tree_visualization.png' and 'outputs/feature_importance.png'")
+plt.savefig(os.path.join(output_dir, 'decision_tree_visualization.png'))
+print("\nVisualizations have been saved as 'outputs/heart_disease_classifier/decision_tree_visualization.png' and 'outputs/heart_disease_classifier/feature_importance.png'")
