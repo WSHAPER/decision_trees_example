@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
+from feature_mapping import get_feature_display_name, get_all_feature_names
 
 # Load the datasets
 train_data = pd.read_csv('sample_data/heart_Disease_training.csv')
@@ -79,7 +80,7 @@ print(classification_report(y_val, y_pred))
 
 # Feature importance analysis
 feature_importance = pd.DataFrame({
-    'feature': X_train.columns,
+    'feature': [get_feature_display_name(col) for col in X_train.columns],
     'importance': best_model.feature_importances_
 })
 feature_importance = feature_importance.sort_values('importance', ascending=False)
@@ -87,16 +88,19 @@ print("\nTop 5 Most Important Features:")
 print(feature_importance.head())
 
 # Plot feature importance
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(12, 6))
 plt.bar(feature_importance['feature'], feature_importance['importance'])
-plt.xticks(rotation=45)
+plt.xticks(rotation=45, ha='right')
 plt.title('Feature Importance')
 plt.tight_layout()
 plt.savefig('feature_importance.png')
 
 # Visualize the decision tree (limited depth for clarity)
 plt.figure(figsize=(20,10))
-plot_tree(best_model, feature_names=list(X_train.columns), class_names=['No Disease', 'Disease'], 
+plot_tree(best_model, 
+          feature_names=[get_feature_display_name(col) for col in X_train.columns],
+          class_names=['No Disease', 'Disease'],
           filled=True, rounded=True, max_depth=3)
+plt.tight_layout()
 plt.savefig('decision_tree_visualization.png')
 print("\nVisualizations have been saved as 'decision_tree_visualization.png' and 'feature_importance.png'")

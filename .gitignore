@@ -19,3 +19,4 @@ build/
 
 # Generated files
 decision_tree_visualization.png
+feature_importance.png
